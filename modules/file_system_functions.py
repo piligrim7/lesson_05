@@ -42,7 +42,7 @@ def copy_file_or_folder(path_source: str, path_dest: str):
         print(f'Имя копируемой и новой папки/файла совпадают!')
 
 def get_dir_list(path: str)->list[str]:
-    return os.listdir()
+    return os.listdir(path=path)
 
 def get_dir_list_folders(path: str)->list[str]:
     result = []
@@ -58,3 +58,9 @@ def get_dir_list_files(path: str)->list[str]:
 
 def get_os_info():
     return platform.platform()
+
+def check_folder(path: str):
+    return os.path.isdir(path)
+
+def get_abs_path(path: str):
+    return os.path.abspath(path=path)

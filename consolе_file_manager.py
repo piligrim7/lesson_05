@@ -1,5 +1,7 @@
 import os
-import functions.file_system as fsf
+from datetime import date
+import modules.victory as victory
+import modules.file_system_functions as fsf
 
 def get_parameter(message: str)->str:
     return input(message)
@@ -17,20 +19,24 @@ menu = {
     8:'создатель программы',
     9:'играть в викторину',
     10:'мой банковский счет',
-    11:'смена рабочей директории (*необязательный пункт)',
-    12:'выход'
+    11:'смена рабочей директории',
+    12:'текущая дата',
+    13:'выход'
 }
 
-num = 0
 while True:
     print('MENU:')
     for n, item in menu.items():
         print(f'{n}. {item}')
-    num = int(input('Введите номер пункта меню: '))
+    s = input('Введите номер пункта меню: ')
+    try:
+        num = int(s)
+    except:
+        num = 0
     match num:
         case 1:
             path = current_folder + os.sep + get_parameter(
-                message='Введите имя создаваемой папки: '
+                message='Введите имя создаваемоqqй папки: '
                 )
             fsf.create_folder(path=path)
         case 2:
@@ -59,16 +65,30 @@ while True:
         case 7:
             print('Информация о системе: ', fsf.get_os_info())
         case 8:
-            pass
+            print('Создатель программы - Юрий Лысаков')
         case 9:
-            pass
+            victory.play_game()
         case 10:
-            pass
+            #Непонятное задание. Заданий на разработку программы для работы
+            #с банковским счетом не было.'
+            print('Мой банковский счет - конфиденциальная информация')
         case 11:
-            pass
+            path = get_parameter(
+                message='Введите путь к рабочей директории: '
+                )
+            if fsf.check_folder(path=current_folder + os.sep + path):
+                current_folder = fsf.get_abs_path(current_folder + os.sep + path)
+                print(f'Рабочая директория изменена на {current_folder}')
+            elif fsf.check_folder(path=path):
+                current_folder = fsf.get_abs_path(path)
+                print(f'Рабочая директория изменена на {current_folder}')
+            else:
+                print(f'Указанная папка не найдена, рабочая директория не изменена!')
         case 12:
+            print('Текущая дата:', date.today().strftime('%d %B %Y'))
+        case 13:
             exit()
         case _:
-            print(f'Пункт меню №{num} не существует!')
+            print(f'Указанный пункт меню не существует!')
 
 
