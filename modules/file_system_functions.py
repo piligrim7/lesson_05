@@ -2,24 +2,28 @@ import os
 import platform
 import shutil
 
-def create_folder(path: str):
+def create_folder(path: str)->str:
     if not os.path.exists(path=path):
-        os.mkdir(path=path)
-        print(f'Папка {path} создана!')
+        try:
+            os.mkdir(path=path)
+            return f'Папка {path} создана.'
+        except:
+            return f'Ошбика при создании папки с именем {path}!'
     else:
-        print(f'Папка {path} уже существует!')
+        return f'Папка {path} уже существует!'
         
 def delete_file_or_folder(path: str):
     if os.path.exists(path=path):
         try:
             os.rmdir(path=path)
-            print(f'Папка {path} удалена!')
+            return f'Папка {path} удалена.'
         except:
             try:
                 os.remove(path=path)
-                print(f'Файл {path} удален!')
+                return f'Файл {path} удален'
             except:
-                print(f'Папка/файл {path} не существует!')
+                return f'Ошибка при удалении папки/файла с именем {path}!'
+    return f'Папка/файл {path} не существует!'
 
 def copy_file_or_folder(path_source: str, path_dest: str):
     if path_dest!=path_source:
@@ -27,19 +31,19 @@ def copy_file_or_folder(path_source: str, path_dest: str):
             if not os.path.exists(path=path_dest):
                 try:
                     shutil.copy(src=path_source, dst=path_dest)
-                    print(f'Файл {path_source} скопирован в {path_dest}!')
+                    return f'Файл {path_source} скопирован в {path_dest}!'
                 except:
                     try:
                         shutil.copytree(src=path_source, dst=path_dest,)
-                        print(f'Папка {path_source} скопирована в {path_dest}!')
+                        return f'Папка {path_source} скопирована в {path_dest}!'
                     except:
                         pass
             else:
-                print(f'Папка/файл назначения {path_dest} уже существует!')
+                return f'Папка/файл назначения {path_dest} уже существует!'
         else:
-            print(f'Каопируемая папка/файл {path_source} не существует!')
+            return f'Каопируемая папка/файл {path_source} не существует!'
     else:
-        print(f'Имя копируемой и новой папки/файла совпадают!')
+        return f'Имя копируемой и новой папки/файла совпадают!'
 
 def get_dir_list(path: str)->list[str]:
     return os.listdir(path=path)
@@ -57,7 +61,13 @@ def get_dir_list_files(path: str)->list[str]:
     return result
 
 def get_os_info():
-    return platform.platform()
+    return f'Информация о системе: {platform.platform()}'
+
+def get_autor_name():
+    return 'Создатель программы - Юрий Лысаков'
+
+def get_bank_account():
+    return 'Мой банковский счет - конфиденциальная информация'
 
 def check_folder(path: str):
     return os.path.isdir(path)
