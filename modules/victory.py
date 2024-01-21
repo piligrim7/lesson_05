@@ -19,9 +19,6 @@ def day_to_text(d):
     
     return dd, mm, d_arr[2]
 
-# for i in range(1, 12+1):
-# 	print(day_to_text('01.' + str(i)))
-
 def play_game():
     by = {
         'Пушкин':'06.06.1799',
