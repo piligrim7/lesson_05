@@ -1,6 +1,7 @@
 import os
 from datetime import date
 import modules.victory as victory
+import modules.bank_account as ba
 import modules.file_system_functions as fsf
 
 def get_parameter(message: str)->str:
@@ -14,19 +15,20 @@ if __name__ == '__main__':
         2:'удалить (файл/папку)',
         3:'копировать (файл/папку)',
         4:'просмотр содержимого рабочей директории',
-        5:'посмотреть только папки',
-        6:'посмотреть только файлы',
-        7:'просмотр информации об операционной системе',
-        8:'создатель программы',
-        9:'играть в викторину',
-        10:'мой банковский счет',
-        11:'смена рабочей директории',
-        12:'текущая дата',
-        13:'выход'
+        5:'сохранить содержимое рабочей директории',
+        6:'посмотреть только папки',
+        7:'посмотреть только файлы',
+        8:'просмотр информации об операционной системе',
+        9:'создатель программы',
+        10:'играть в викторину',
+        11:'мой банковский счет',
+        12:'смена рабочей директории',
+        13:'текущая дата',
+        14:'выход'
     }
 
     while True:
-        print('MENU:')
+        print('Меню:')
         for n, item in menu.items():
             print(f'{n}. {item}')
         s = input('Введите номер пункта меню: ')
@@ -58,22 +60,24 @@ if __name__ == '__main__':
                 print(f'Содержимое текущей директории {current_folder}:')
                 print(fsf.get_dir_list(path=current_folder))
             case 5:
+                print(fsf.save_dir_list(file_name='listdir.txt', path=current_folder))
+            case 6:
                 print(f'Папки в текущей директории {current_folder}:')
                 print(fsf.get_dir_list_folders(path=current_folder))
-            case 6:
+            case 7:
                 print(f'Файлы в текущей директории {current_folder}:')
                 print(fsf.get_dir_list_files(path=current_folder))
-            case 7:
-                print(fsf.get_os_info())
             case 8:
-                print(fsf.get_autor_name())
+                print(fsf.get_os_info())
             case 9:
-                victory.play_game()
+                print(fsf.get_autor_name())
             case 10:
+                victory.play_game()
+            case 11:
                 #Непонятное задание. Заданий на разработку программы для работы
                 #с банковским счетом не было.'
-                print(fsf.get_bank_account())
-            case 11:
+                ba.to_buy()
+            case 12:
                 path = get_parameter(
                     message='Введите путь к рабочей директории: '
                     )
@@ -85,9 +89,9 @@ if __name__ == '__main__':
                     print(f'Рабочая директория изменена на {current_folder}')
                 else:
                     print(f'Указанная папка не найдена, рабочая директория не изменена!')
-            case 12:
-                print('Текущая дата:', date.today().strftime('%d %B %Y'))
             case 13:
+                print('Текущая дата:', date.today().strftime('%d %B %Y'))
+            case 14:
                 exit()
             case _:
                 print(f'Указанный пункт меню не существует!')

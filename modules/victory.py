@@ -20,6 +20,7 @@ def day_to_text(d):
     return dd, mm, d_arr[2]
 
 def play_game():
+    print('Игра "Викторина"')
     by = {
         'Пушкин':'06.06.1799',
         'Лермонтов':'15.10.1814',
