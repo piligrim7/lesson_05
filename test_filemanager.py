@@ -32,3 +32,60 @@ def test_delete_file_or_folder():
     if os.path.isfile(path):
         os.remove(path=path)
 
+def test_copy_file_or_folder():
+    path_source = '?'
+    path_dest = '?'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Имя копируемой и новой папки/файла совпадают!'
+    path_source = ','
+    path_dest = '?'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Копируемая папка/файл {path_source} не существует!'
+    path_source = 'some_folder_name_9876501234'
+    os.mkdir(path=path_source)
+    path_dest = '?'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Ошибка копирования Папки/файла {path_source} в {path_dest}!'
+    path_dest = 'some_folder_name_9876501234_1'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Папка {path_source} скопирована в {path_dest}!'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Папка/файл назначения {path_dest} уже существует!'
+    os.rmdir(path=path_source)
+    os.rmdir(path=path_dest)
+    
+    path_source = 'some_file_name_9876501234.txt'
+    f = open(path_source, 'w')
+    f.close()
+    path_dest = 'some_file_name_9876501234_1.txt'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Файл {path_source} скопирован в {path_dest}!'
+    assert fsf.copy_file_or_folder(
+        path_source = path_source,
+        path_dest = path_dest
+        )==f'Папка/файл назначения {path_dest} уже существует!'
+    os.remove(path=path_source)
+    os.remove(path=path_dest)
+
+def test_save_dir_list():
+    file_name = 'some_file_name_9876501234.txt'
+    path = 'some_folder_name_9876501234'
+    assert fsf.save_dir_list(file_name=file_name,
+                             path=path)==f'Папка {path} не существует!'
+    os.mkdir(path=path)
+    assert fsf.save_dir_list(file_name=file_name,
+                             path=path)==f'Содержимое папки {path} сохранено в файл {file_name}.'
+    os.remove(file_name)
+    os.rmdir(path=path)

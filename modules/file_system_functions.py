@@ -37,28 +37,67 @@ def copy_file_or_folder(path_source: str, path_dest: str):
                         shutil.copytree(src=path_source, dst=path_dest,)
                         return f'Папка {path_source} скопирована в {path_dest}!'
                     except:
-                        pass
+                        return f'Ошибка копирования Папки/файла {path_source} в {path_dest}!'
             else:
                 return f'Папка/файл назначения {path_dest} уже существует!'
         else:
-            return f'Каопируемая папка/файл {path_source} не существует!'
+            return f'Копируемая папка/файл {path_source} не существует!'
     else:
         return f'Имя копируемой и новой папки/файла совпадают!'
 
 def get_dir_list(path: str)->list[str]:
-    return os.listdir(path=path)
+    if os.path.isdir(path):
+        return os.listdir(path=path)
+    else:
+        return []
+
+def get_files_and_dirs(path: str)->([],[]):
+    f_list = []
+    dir_list = []
+    l = get_dir_list(path=path)
+    for f in l:
+        if os.path.isdir(path+os.sep+f):
+            dir_list.append(f)
+        elif os.path.isfile(path+os.sep+f):
+            f_list.append(f)
+    return f_list, dir_list
 
 def get_dir_list_folders(path: str)->list[str]:
-    result = []
-    for (dirpath, dirnames, filenames) in os.walk(path):
-        result.extend(dirnames)
-    return result
+    f_list, dir_list = get_files_and_dirs(path=path)
+    return dir_list
 
 def get_dir_list_files(path: str)->list[str]:
-    result = []
-    for (dirpath, dirnames, filenames) in os.walk(path):
-        result.extend(filenames)
-    return result
+    f_list, dir_list = get_files_and_dirs(path=path)
+    return f_list
+
+def save_dir_list(file_name: str, path: str)->str:
+    if os.path.exists(path=path):
+        try:
+            with open(file_name, 'w') as wf:
+                f_list, dir_list = get_files_and_dirs(path=path)
+                first = True
+                s='files: '
+                for f in f_list:
+                    if first:
+                        s += f
+                        first = False
+                    else:
+                        s += ', ' + f
+                wf.write(s+'\n')
+                first = True
+                s='dirs: '
+                for f in dir_list:
+                    if first:
+                        s += f
+                        first = False
+                    else:
+                        s += ', ' + f
+                wf.write(s)
+            return f'Содержимое папки {path} сохранено в файл {file_name}.'
+        except:
+            return f'Ошибка сохранения в файл {file_name}!'
+    else:
+        return f'Папка {path} не существует!'
 
 def get_os_info():
     return f'Информация о системе: {platform.platform()}'
