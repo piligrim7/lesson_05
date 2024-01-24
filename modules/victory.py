@@ -33,21 +33,17 @@ def play_game():
         'Айвазовский':'29.07.1817',
         'Маяковский':'19.07.1893'
         }
-    cnt_all = len(by) # Общее количество д/р знаменитостей в базе викторины
     cnt = 5 # Количество вопросов игроку
     repeat = True
     while repeat:
-        ar = rnd.sample(range(cnt_all),cnt)
+        names = rnd.sample(sorted(by),cnt)
         correct = 0
-        keys = list(by)
-        for i in ar:
-            g = input('Когда родился {}? (dd.mm.yyyy) '.format(keys[i]))
-            result = g == by[keys[i]]
-            if not result:
-                dd,mm,yy = day_to_text(by[keys[i]])
-                
-                print('{} родился {} {} {} года'.format(keys[i], dd, mm, yy))
-            correct += result
+        for name in names:
+            if by[name]==input(f'Когда родился {name}? (dd.mm.yyyy) '):
+                correct += 1
+            else:
+                dd,mm,yy = day_to_text(by[name])
+                print(f'{name} родился {dd} {mm} {yy} года')
         print('Количество правильных ответов:', correct)
         print('Количество ошибок:', cnt - correct)
         repeat = input('Начать игру сначала (да/нет?) ') == 'да'

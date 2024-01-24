@@ -1,7 +1,7 @@
 import os
 from datetime import date
 import modules.victory as victory
-import modules.bank_account as ba
+import modules.bank_bill as bbil
 import modules.file_system_functions as fsf
 
 def get_parameter(message: str)->str:
@@ -29,8 +29,7 @@ if __name__ == '__main__':
 
     while True:
         print('Меню:')
-        for n, item in menu.items():
-            print(f'{n}. {item}')
+        [print(f'{n}. {item}') for n, item in menu.items()]
         s = input('Введите номер пункта меню: ')
         try:
             num = int(s)
@@ -44,7 +43,7 @@ if __name__ == '__main__':
                 print(fsf.create_folder(path=path))
             case 2:
                 path = current_folder + os.sep + get_parameter(
-                    message='Введите имя удаляемой папки/файла: '
+                    mes11sage='Введите имя удаляемой папки/файла: '
                     )
                 print(fsf.delete_file_or_folder(path=path))
 
@@ -74,9 +73,7 @@ if __name__ == '__main__':
             case 10:
                 victory.play_game()
             case 11:
-                #Непонятное задание. Заданий на разработку программы для работы
-                #с банковским счетом не было.'
-                ba.to_buy()
+                bbil.begin()
             case 12:
                 path = get_parameter(
                     message='Введите путь к рабочей директории: '

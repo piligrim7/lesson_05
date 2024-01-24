@@ -26,9 +26,13 @@ def delete_file_or_folder(path: str):
     return f'Папка/файл {path} не существует!'
 
 def copy_file_or_folder(path_source: str, path_dest: str):
-    if path_dest!=path_source:
+    if path_dest==path_source:
+        return f'Имя копируемой и новой папки/файла совпадают!'
+    else:
         if os.path.exists(path=path_source):
-            if not os.path.exists(path=path_dest):
+            if os.path.exists(path=path_dest):
+                return f'Папка/файл назначения {path_dest} уже существует!'
+            else:
                 try:
                     shutil.copy(src=path_source, dst=path_dest)
                     return f'Файл {path_source} скопирован в {path_dest}!'
@@ -38,61 +42,38 @@ def copy_file_or_folder(path_source: str, path_dest: str):
                         return f'Папка {path_source} скопирована в {path_dest}!'
                     except:
                         return f'Ошибка копирования Папки/файла {path_source} в {path_dest}!'
-            else:
-                return f'Папка/файл назначения {path_dest} уже существует!'
         else:
             return f'Копируемая папка/файл {path_source} не существует!'
-    else:
-        return f'Имя копируемой и новой папки/файла совпадают!'
 
 def get_dir_list(path: str)->list[str]:
-    if os.path.isdir(path):
-        return os.listdir(path=path)
-    else:
-        return []
-
-def get_files_and_dirs(path: str)->([],[]):
-    f_list = []
-    dir_list = []
-    l = get_dir_list(path=path)
-    for f in l:
-        if os.path.isdir(path+os.sep+f):
-            dir_list.append(f)
-        elif os.path.isfile(path+os.sep+f):
-            f_list.append(f)
-    return f_list, dir_list
-
-def get_dir_list_folders(path: str)->list[str]:
-    f_list, dir_list = get_files_and_dirs(path=path)
-    return dir_list
+    return os.listdir(path=path) if os.path.isdir(path) else []
 
 def get_dir_list_files(path: str)->list[str]:
-    f_list, dir_list = get_files_and_dirs(path=path)
-    return f_list
+    return [f for f in get_dir_list(path=path) if os.path.isfile(path+os.sep+f)]
+
+def get_dir_list_folders(path: str)->list[str]:
+    return [d for d in get_dir_list(path=path) if os.path.isdir(path+os.sep+d)]
+
+def add_before_after(f)->str:
+    def inner(some_list: list[str], before:str = '', after: str = '')->str:
+        return before + f(some_list) + after
+    return inner
+
+@add_before_after
+def list_to_str(some_list: list[str])->str:
+    s=''
+    for some in some_list:
+        s += ', ' + some if s else some
+    return s
 
 def save_dir_list(file_name: str, path: str)->str:
     if os.path.exists(path=path):
         try:
             with open(file_name, 'w') as wf:
-                f_list, dir_list = get_files_and_dirs(path=path)
-                first = True
-                s='files: '
-                for f in f_list:
-                    if first:
-                        s += f
-                        first = False
-                    else:
-                        s += ', ' + f
-                wf.write(s+'\n')
-                first = True
-                s='dirs: '
-                for f in dir_list:
-                    if first:
-                        s += f
-                        first = False
-                    else:
-                        s += ', ' + f
-                wf.write(s)
+                f_list = get_dir_list_files(path=path)
+                wf.write(list_to_str(some_list=f_list, before='files: ', after='\n'))
+                dir_list = get_dir_list_folders(path=path)
+                wf.write(list_to_str(some_list=dir_list, before='dirs: '))
             return f'Содержимое папки {path} сохранено в файл {file_name}.'
         except:
             return f'Ошибка сохранения в файл {file_name}!'

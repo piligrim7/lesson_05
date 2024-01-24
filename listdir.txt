@@ -1,2 +1,2 @@
-files: bank_account.py, file_system_functions.py, victory.py, __init__.py
-dirs: __pycache__
+files: console_file_manager.py, listdir.txt, test_bank_account.py, test_file_system_functions.py, test_python.py, test_victory.py
+dirs: .git, .pytest_cache, .venv, .vscode, modules, __pycache__
