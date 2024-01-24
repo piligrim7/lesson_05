@@ -89,3 +89,7 @@ def test_save_dir_list():
                              path=path)==f'Содержимое папки {path} сохранено в файл {file_name}.'
     os.remove(file_name)
     os.rmdir(path=path)
+
+def test_list_to_str():
+    some_list:list[str] = [str(i) for i in range(10)]
+    assert fsf.list_to_str(some_list=some_list) == '0, 1, 2, 3, 4, 5, 6, 7, 8, 9'
